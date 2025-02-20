@@ -1,0 +1,20 @@
+# WikiWeave
+
+What is WikiWeave?
+
+An experiment for me to start learning more about GenAI and see where it takes me.
+
+The simplified idea is this:
+- Create a story based on two wikipedia entries
+- The app will eventually allow a user to enter two things
+  - Look for the best wiki article related to the entries
+  - Find the connected graph between the two entries (following linked articles)
+  - Using the context from the article path, create a story for how the first entry led to the second entry.
+
+For example if I said Star Wars and Airplanes and the in between article path was:
+```
+Star Wars --> Space ships --> Rocket science --> Birds --> Flight --> Airplanes.
+```
+It might output a story about how these each led from Star Wars to Airplanes
+
+Of course I have no idea what I'm doing, so this should be fun and see where I land and what incremental progress I can make. 
