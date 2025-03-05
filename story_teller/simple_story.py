@@ -92,6 +92,13 @@ class StoryTeller:
 if __name__ == "__main__":
     StoryTeller().generate_story()
 
+# Analysis: I'm really happy with the tone of the story and it being fun and creative, but I would
+# like to see more of a connection between the items and some type of explanation of the
+# evolutionary steps.
+
+# Input: airplanes,flight,birds,star wars, spaceships,rocket science
+# Output:
+#
 # Once upon a time, in a bustling realm known as the Skies of Imaginaria, the very first airplanes
 # took to the stratosphere. Crafted from dreams and laughter, these marvelous machines soared like
 # kites caught in a joyous gale, propelling inventors and dreamers through cotton-candy clouds.
