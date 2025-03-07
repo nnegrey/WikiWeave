@@ -8,7 +8,7 @@ from prompts import simple_story_formatter
 
 class Main:
 
-    def run(self, formatter, call_openai, gitems):
+    def run(self, formatter, call_openai, items):
         print("formatter:", formatter)
         print("call_openai:", call_openai)
         print("items:", items)
