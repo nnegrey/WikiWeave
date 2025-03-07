@@ -1,4 +1,4 @@
-""" This script uses the OpenAI API to generate a weaved story. """
+"""This script uses the OpenAI API to generate a weaved story."""
 
 import os
 from dotenv import load_dotenv
@@ -13,84 +13,16 @@ class StoryTeller:
         load_dotenv()
         self.client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
 
-    def generate_story(self):
+    def generate_story(self, prompt_messages):
         """Generate a story using the OpenAI API."""
         completion = self.client.chat.completions.create(
             model="gpt-4o-mini",
             store=True,
-            messages=self.__create_the_prompt_messages(),
+            messages=prompt_messages,
         )
 
         print(completion.choices[0].message)
 
-    def __create_the_prompt_messages(self):
-        messages = []
-        # Set up the Developer Role
-        messages.append(
-            {
-                "role": "developer",
-                "content": (
-                    "You are a whimsical and imaginative storyteller, a weaver of tales that "
-                    "bend the very fabric of reality."
-                ),
-            }
-        )
-        # Set up the Task
-        messages.append(
-            {
-                "role": "user",
-                "content": "Your task is to create a captivating narrative that "
-                "connects two seemingly disparate concepts, using a series of intermediary ideas "
-                "as essential stepping stones in this evolutionary process. You will be given a "
-                "list of items, each representing a stage "
-                "in a fantastical evolutionary journey. Your mission is to craft a story that "
-                "explains how the first item, through a series of improbable but delightful "
-                "transformations, ultimately led to the creation or evolution of the last item. "
-                "You should use your existing knowledge of the items to creatively link them in "
-                "known or new ways. "
-                "Embrace the absurd and the fantastical. Feel free to defy conventional logic and "
-                "scientific understanding. The goal is not to be accurate, but to be entertaining "
-                "and imaginative.",
-            },
-        )
-        # Set up the Guidelines
-        messages.append(
-            {
-                "role": "user",
-                "content": "**Guidelines:** "
-                "1. **Sequential Flow:** The narrative should progress logically, detailing how "
-                "each item contributed to the emergence of the next item in a directed chain of "
-                "evolution. "
-                "2. **Creative Imagination:** Embrace imagination within each section "
-                "3. **Direct Consequence:** Each item (except the first, which should be treated "
-                "as a constant) must arise directly from the preceding item, explicitly indicating "
-                "the cause-and-effect relationship showing progression.",
-            },
-        )
-        # TODO Provide an example
-        # Provide the success criteria
-        messages.append(
-            {
-                "role": "user",
-                "content": "**Success Criteria:** Create a fictional story that seamlessly "
-                "connects these disparate elements and weaving the items together.",
-            },
-        )
-        # Provide the user input list of items
-        messages.extend(
-            {"role": "user", "content": f"Item {i + 1}: {item}"}
-            for i, item in enumerate(self.__get_user_input())
-        )
-        messages.append({"role": "user", "content": "Start your narrative now."})
-        return messages
-
-    def __get_user_input(self):
-        """Get user input to generate a story."""
-        return input("Enter a comma separated list of items for the story: ").split(",")
-
-
-if __name__ == "__main__":
-    StoryTeller().generate_story()
 
 # Analysis: I'm really happy with the tone of the story and it being fun and creative, but I would
 # like to see more of a connection between the items and some type of explanation of the
