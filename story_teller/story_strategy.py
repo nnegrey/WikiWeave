@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
 
-class PromptFormatter(ABC):
+class StoryStrategy(ABC):
 
     @abstractmethod
-    def format(self, prompt_args):
+    def generate_story(self, links):
         pass

@@ -2,42 +2,37 @@
 
 import argparse
 
-from story_teller import simple_story
-from story_teller import simple_story_formatter
+from story_teller import story_teller
 from graph_traversal import graph_traversal
 
 
 class Main:
 
     def __print_configurations(self, args):
+        print("***** Input *****")
         print(f"Start Item: {args.start_item}")
         print(f"Start Description: {args.start_description}")
         print(f"End Item: {args.end_item}")
         print(f"End Description: {args.end_description}")
-        print("WikiWeave Configuration:")
+        print("***** WikiWeave Configuration *****")
         print(f"\tGraph Traversal Strategry: {args.graph_traversal}")
         print(f"\tStory Teller Strategy: {args.story_teller}")
         print(f"\tCall OpenAI: {args.call_openai}")
+        print("**********")
 
     def run(self, args):
         self.__print_configurations(args)
 
-        print("Finding the linked path between the two items...")
+        print(
+            f"Finding the linked path between the two items: {args.start_item}, {args.end_item}"
+        )
         gt = graph_traversal.GraphTraversal(args.graph_traversal)
         items = gt.find_linked_path(args.start_item, args.end_item, args.call_openai)
-        print("Linked Items: ", items)
-        print("Weaving the story...")
-        prompt_formatter = None
-        if args.story_teller == "simple_story":
-            prompt_formatter = simple_story_formatter.SimpleStoryFormatter()
+        print("\nLinked Items: ", items)
+        print("\nWeaving the story...")
+        st = story_teller.StoryTeller(args.story_teller)
 
-        prompt = prompt_formatter.format(items)
-
-        print(prompt)
-
-        if args.call_openai:
-            storyTeller = simple_story.StoryTeller()
-            storyTeller.generate_story(prompt)
+        st.generate_story(items)
 
 
 if __name__ == "__main__":
