@@ -2,8 +2,8 @@ import json
 
 
 class PromptLoader:
-    def __init__(self):
-        self.file_path = "prompts/prompt.json"
+    def __init__(self, file_path):
+        self.file_path = file_path
 
     def get_prompt(self):
         """Gets a prompt from a JSON file."""

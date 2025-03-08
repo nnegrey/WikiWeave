@@ -1,0 +1,8 @@
+{
+    "task_content": "Let's create a chain of reasoning to connect two topics. I'll give you a start topic and an end topic, and you'll provide three intermediary topics that form a logical bridge between them. Think of it as a series of steps that show how one topic could lead to the other.",
+    "task_example": "Start Topic: birds, End Topic: space ships, Chain of Reasoning: 1. Birds possess the ability of: flight, 2. Flight has been studied and replicated in: airplanes, 3. Airplanes have led to the development of: rocket science.",
+    "output_format": "Output Format: [topic1, topic2, topic3] ---",
+    "start_task": "Start Topic:",
+    "end_task": "End Topic:",
+    "chain_of_reasoning": "Output:"
+}

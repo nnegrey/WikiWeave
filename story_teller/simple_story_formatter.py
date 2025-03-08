@@ -1,10 +1,12 @@
-from prompts import prompt_formatter
+from story_teller import prompt_formatter
 from prompts import prompt_loader
 
 
 class SimpleStoryFormatter(prompt_formatter.PromptFormatter):
     def format(self, prompt_args):
-        json_prompt_data = prompt_loader.PromptLoader().get_prompt()
+        json_prompt_data = prompt_loader.PromptLoader(
+            "prompts/prompt.json"
+        ).get_prompt()
         messages = []
         # Set up the Developer Role
         messages.append(
