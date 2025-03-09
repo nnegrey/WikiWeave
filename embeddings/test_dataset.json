@@ -1,0 +1,64 @@
+{
+    "pages": [
+        {
+            "id": 0,
+            "title": "Python (programming language)",
+            "title_embedding": null,
+            "summary": "Python is a high-level, general-purpose programming language. Its design philosophy emphasizes code readability with the use of significant indentation.\nPython is dynamically type-checked and garbage-collected. It supports multiple programming paradigms, including structured (particularly procedural), object-oriented and functional programming. It is often described as a \"batteries included\" language due to its comprehensive standard library.\nGuido van Rossum began working on Python in the late 1980s as a successor to the ABC programming language and first released it in 1991 as Python 0.9.0. Python 2.0 was released in 2000. Python 3.0, released in 2008, was a major revision not completely backward-compatible with earlier versions. Python 2.7.18, released in 2020, was the last release of Python 2.\nPython consistently ranks as one of the most popular programming languages, and has gained widespread use in the machine learning community.",
+            "summary_embedding": null,
+            "full_url": "https://en.wikipedia.org/wiki/Python_(programming_language)",
+            "canonical_url": "https://en.wikipedia.org/wiki/Python_(programming_language)",
+            "linked_titles": [
+                {
+                    "title": "\"Hello, World!\" program"
+                },
+                {
+                    "title": "3ds Max"
+                },
+                {
+                    "title": "?:"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "title": "\"Hello, World!\" program",
+            "title_embedding": null,
+            "summary": "A \"Hello, World!\" program is usually a simple computer program that emits (or displays) to the screen (often the console) a message similar to \"Hello, World!\". A small piece of code in most general-purpose programming languages, this program is used to illustrate a language's basic syntax. Such program is often the first written by a student of a new programming language, but such a program can also be used as a sanity check to ensure that the computer software intended to compile or run source code is correctly installed, and that its operator understands how to use it.",
+            "summary_embedding": null,
+            "full_url": "https://en.wikipedia.org/wiki/%22Hello,_World!%22_program",
+            "canonical_url": "https://en.wikipedia.org/wiki/%22Hello,_World!%22_program",
+            "linked_titles": [
+                {
+                    "title": ".deb"
+                },
+                {
+                    "title": "1951 USAF resolution test chart"
+                },
+                {
+                    "title": "3DBenchy"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Autodesk 3ds Max",
+            "title_embedding": null,
+            "summary": "Autodesk 3ds Max, formerly 3D Studio and 3D Studio Max, is a professional 3D computer graphics program for making 3D animations, models, games and images. It is developed and produced by Autodesk Media and Entertainment. It has modeling capabilities and a flexible plugin architecture and must be used on the Microsoft Windows platform. It is frequently used by video game developers, many TV commercial studios, and architectural visualization studios. It is also used for movie effects and movie pre-visualization. 3ds Max features shaders (such as ambient occlusion and subsurface scattering), dynamic simulation, particle systems, radiosity, normal map creation and rendering, global illumination, a customizable user interface, and its own scripting language.",
+            "summary_embedding": null,
+            "full_url": "https://en.wikipedia.org/wiki/Autodesk_3ds_Max",
+            "canonical_url": "https://en.wikipedia.org/wiki/Autodesk_3ds_Max",
+            "linked_titles": [
+                {
+                    "title": ".3ds"
+                },
+                {
+                    "title": "2012 (film)"
+                },
+                {
+                    "title": "3D-Coat"
+                }
+            ]
+        }
+    ]
+}
