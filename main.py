@@ -4,6 +4,7 @@ import argparse
 
 from story_teller import story_teller
 from graph_traversal import graph_traversal
+from embeddings import wiki_fetch
 
 
 class Main:
@@ -63,5 +64,12 @@ if __name__ == "__main__":
         "-st", "--story-teller", help="Prompt Formatter", default="simple_story"
     )
     parser.add_argument("-c", "--call_openai", help="Call OpenAI", default=False)
+    parser.add_argument(
+        "-gtd", "--generate_test_dataset", help="Generate a test dataset", default=False
+    )
 
-    Main().run(parser.parse_args())
+    args = parser.parse_args()
+    if args.generate_test_dataset:
+        wiki_fetch.WikiFetch().create_test_dataset()
+    else:
+        Main().run(args)
