@@ -1,13 +1,21 @@
 """Main"""
 
 import argparse
+import os
+from dotenv import load_dotenv
+from openai import OpenAI
 
 from story_teller import story_teller
 from graph_traversal import graph_traversal
 from embeddings import wiki_fetch
+from knowledge_base import storage_layer
 
 
 class Main:
+
+    def __init__(self, openai_client):
+        self.openai_client = openai_client
+        self.storage_layer = storage_layer.StorageLayer()
 
     def __print_configurations(self, args):
         print("***** Input *****")
@@ -27,7 +35,11 @@ class Main:
         print(
             f"Finding the linked path between the two items: {args.start_item}, {args.end_item}"
         )
-        gt = graph_traversal.GraphTraversal(args.graph_traversal)
+        gt = graph_traversal.GraphTraversal(
+            args.graph_traversal,
+            self.openai_client,
+            self.storage_layer,
+        )
         items = gt.find_linked_path(args.start_item, args.end_item, args.call_openai)
         print("\nLinked Items: ", items)
         print("\nWeaving the story...")
@@ -69,7 +81,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    load_dotenv()
+    openai_client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
     if args.generate_test_dataset:
-        wiki_fetch.WikiFetch().create_test_dataset()
+        wiki_fetch.WikiFetch(openai_client).create_test_dataset()
     else:
-        Main().run(args)
+        Main(openai_client).run(args)

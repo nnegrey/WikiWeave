@@ -8,12 +8,12 @@ from embeddings import embedding_generator
 
 class WikiFetch:
 
-    def __init__(self, lang="en"):
+    def __init__(self, client, lang="en"):
         self.lang = lang
         self.wiki = wikipediaapi.Wikipedia(
             user_agent="WikiWeave (noah.negrey@gmail.com)", language=self.lang
         )
-        self.embed_gen = embedding_generator.EmbeddingGenerator()
+        self.embed_gen = embedding_generator.EmbeddingGenerator(client)
         # Controls how many links (nodes) in the dataset
         self.num_links_to_traverse = 3
         # Controls how many links (edges) per node in the dataset

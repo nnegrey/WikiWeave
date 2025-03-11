@@ -1,14 +1,9 @@
 """Embedding Generator for the Storage Layer"""
 
-import os
-from dotenv import load_dotenv
-from openai import OpenAI
-
 
 class EmbeddingGenerator:
-    def __init__(self):
-        load_dotenv()
-        self.client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
+    def __init__(self, client):
+        self.client = client
         self.embedding_model = "text-embedding-3-small"
         # Explicitly set dimension size to 256, because we are starting with summary text only
         # (Plus keep costs down, if I get to it later, I'd love to do a performance comparison)
@@ -30,3 +25,13 @@ class EmbeddingGenerator:
             dimensions=self.num_dimensions,
         )
         wiki_page_json["summary_embedding"] = response.data[0].embedding
+
+    def embed_user_input(self, user_input):
+        return {
+            "input": user_input,
+            "embedding": self.client.embeddings.create(
+                input=user_input,
+                model=self.embedding_model,
+                dimensions=self.num_dimensions,
+            ),
+        }

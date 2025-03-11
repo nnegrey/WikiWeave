@@ -1,9 +1,5 @@
 """Link Generator Travesral Strategy"""
 
-import os
-from dotenv import load_dotenv
-from openai import OpenAI
-
 from graph_traversal import traversal_strategy
 from json_data import json_loader
 
@@ -11,10 +7,9 @@ from json_data import json_loader
 class LinkGenerator(traversal_strategy.TraversalStrategy):
     """LinkGenerator attempts to use AI to guess what the links would be between the two topics."""
 
-    def __init__(self):
+    def __init__(self, openai_client):
         """Load environment variables from .env file and initialize the OpenAI client."""
-        load_dotenv()
-        self.client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
+        self.client = openai_client
         self.json_loader = json_loader.JsonLoader()
         print("\n***** Link Generator Traversal Strategy *****")
 
