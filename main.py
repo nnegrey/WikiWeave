@@ -13,8 +13,8 @@ from knowledge_base import storage_layer
 
 class Main:
 
-    def __init__(self, openai_client):
-        self.openai_client = openai_client
+    def __init__(self, client):
+        self.client = client
         self.storage_layer = storage_layer.StorageLayer()
 
     def __print_configurations(self, args):
@@ -37,7 +37,7 @@ class Main:
         )
         gt = graph_traversal.GraphTraversal(
             args.graph_traversal,
-            self.openai_client,
+            self.client,
             self.storage_layer,
         )
         items = gt.find_linked_path(args.start_item, args.end_item, args.call_openai)

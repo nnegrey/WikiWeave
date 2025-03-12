@@ -51,7 +51,7 @@ class WikiFetch:
             _id += 1
 
         output_json = {"pages": pages}
-        with open("knowledge_base/dataset.json", "w") as f:
+        with open("knowledge_base/data/dataset.json", "w") as f:
             json.dump(output_json, f)
 
     def __page_to_json(self, _id, page, truncated_links):

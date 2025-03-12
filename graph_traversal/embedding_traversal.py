@@ -56,7 +56,7 @@ class EmbeddingTraversal(traversal_strategy.TraversalStrategy):
 
         # TODO: Cluster embedding results into 5 clusters, summarize the clusters
 
-        return [start_node["title"], end_node["title"]]
+        return [start_node[1], end_node[1]]
 
     def __get_canned_start_end_embeddings(self):
         return self.json_loader.get_json(
