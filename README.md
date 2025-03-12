@@ -27,7 +27,7 @@ Using Wikipedia articles, weave together a evolutionary narrative that tells a s
   * `EmbeddingTraversal` [**alpha**]
     * `Article Identification` [**Complete**] - Scans the dataset to find the best matched articles for start and end point.
       * *Optimization* [**TODO**] - Offline process the dataset into layers of Clusters, then continually cluster the input until you have a small enough sample-size to find the best match.
-    * [**TODO**] - Traverse the links by selecting the best link from the current node using the target embedding to select the path.
+    * [**alpha**] - Traverse the links by selecting the best link from the current node using the target embedding to select the path.
       * *Optimization* [**TODO**] - 
       * *Optimization* [**TODO**] - Cluster the results into smaller groups and create summaries of the clusters to be used by the story teller.
 * StoryTeller
