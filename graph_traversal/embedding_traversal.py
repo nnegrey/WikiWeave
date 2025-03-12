@@ -1,5 +1,9 @@
 """Embedding Travesral Strategy"""
 
+import ast
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
 from graph_traversal import traversal_strategy
 from embeddings import embedding_generator
 from json_data import json_loader
@@ -41,22 +45,50 @@ class EmbeddingTraversal(traversal_strategy.TraversalStrategy):
         start_node, end_node = self.storage_layer.find_start_and_end_nodes(
             start_embed, end_embed
         )
-        # curr_node = start_node
-        # path = [curr_node, end_node]
-        # Step 3: Search via curr_node's linked_pages
-        #   - Compute distance of linked_pages to end_node via description_embeddings
-        #   - Get best match
-        #   - If no more links,
-        #       jump from current article to a similar article that has not yet been searched
-        #       (use LLM to pick a mid point description between this article and end and then
-        #       repeat 2, 3
-        #       Go back?
-        # Repeat 3 until you reach end
-        # Avoid cycles so track path and searched links
 
+        print(f"Start Point: {start_node["id"]}, {start_node["title"]}")
+        print(f"End Point: {end_node["id"]}, {end_node["title"]}")
+
+        curr_node = start_node
+        path = [curr_node["title"]]
+        visited_titles = []
+        while end_node["title"] not in path and len(path) < 10:
+            visited_titles.append(curr_node["title"])
+            links = self.storage_layer.get_links(curr_node["id"])
+
+            if end_node["title"] in links:
+                path.append(end_node["title"])
+                break
+
+            title_embeddings = []
+            titles = []
+            for link in links:
+                if link in visited_titles:
+                    continue
+                embedding_str = self.storage_layer.get_embedding_str(link)
+                if embedding_str:
+                    try:
+                        embedding_list = ast.literal_eval(embedding_str)
+                        title_embeddings.append(np.array(embedding_list))
+                        titles.append(link)
+                    except (ValueError, SyntaxError) as e:
+                        print(f"Error parsing title embedding string: {e}")
+                        return None
+
+            title_embeddings = np.array(title_embeddings)
+
+            # Calculate cosine similarities
+            similarities = cosine_similarity(
+                [np.array(ast.literal_eval(end_node["title_embedding"]))],
+                title_embeddings,
+            )[0]
+
+            # Find the best match
+            best_match = np.argmax(similarities)
+            curr_node = self.storage_layer.get_path_node_from_title(titles[best_match])
+            path.append(curr_node["title"])
         # TODO: Cluster embedding results into 5 clusters, summarize the clusters
-
-        return [start_node[1], end_node[1]]
+        return path
 
     def __get_canned_start_end_embeddings(self):
         return self.json_loader.get_json(

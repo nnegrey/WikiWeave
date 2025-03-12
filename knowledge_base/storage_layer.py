@@ -1,9 +1,9 @@
 """Storage Layer for the Wiki Dataset"""
 
-import json
+import ast
 import pandas as pd
 import numpy as np
-import ast
+
 from sklearn.metrics.pairwise import cosine_similarity
 
 # from utils.embeddings_utils import (
@@ -71,16 +71,21 @@ class StorageLayer:
             end_embedding_input
         )
 
-        start_best_match = self.pages_df.iloc[start_best_match_index]
-        end_best_match = self.pages_df.iloc[end_best_match_index]
-
         return (
-            (
-                start_best_match["id"],
-                start_best_match["title"],
-                start_best_match["summary"],
-            ),
-            (end_best_match["id"], end_best_match["title"], end_best_match["summary"]),
+            {
+                "id": self.pages_df.iloc[start_best_match_index]["id"],
+                "title": self.pages_df.iloc[start_best_match_index]["title"],
+                "title_embedding": self.embeddings_df.iloc[start_best_match_index][
+                    "title_embedding"
+                ],
+            },
+            {
+                "id": self.pages_df.iloc[end_best_match_index]["id"],
+                "title": self.pages_df.iloc[end_best_match_index]["title"],
+                "title_embedding": self.embeddings_df.iloc[end_best_match_index][
+                    "title_embedding"
+                ],
+            },
         )
 
     # TODO: Probably switch this to id later and store the list of ids instead of titles
@@ -93,3 +98,28 @@ class StorageLayer:
             if page["title"] == title:
                 return page
         return None
+
+    def get_path_node_from_title(self, title):
+        row = self.pages_df[self.pages_df["title"] == title]
+        return {
+            "id": row.iloc[0]["id"],
+            "title": row.iloc[0]["title"],
+            "title_embedding": self.embeddings_df.iloc[row.iloc[0]["id"]][
+                "title_embedding"
+            ],
+        }
+
+    def get_links(self, _id):
+        return ast.literal_eval(self.links_df.iloc[_id]["linked_titles"])
+
+    def get_embedding_str(self, title):
+        try:
+            row = self.pages_df[self.pages_df["title"] == title]
+
+            if not row.empty:
+                return self.embeddings_df.iloc[row.iloc[0]["id"]]["title_embedding"]
+            else:
+                return None
+
+        except KeyError:
+            return None  # Handle missing column
