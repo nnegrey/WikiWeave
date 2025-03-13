@@ -6,14 +6,6 @@ import numpy as np
 
 from sklearn.metrics.pairwise import cosine_similarity
 
-# from utils.embeddings_utils import (
-#     get_embedding,
-#     distances_from_embeddings,
-#     tsne_components_from_embeddings,
-#     chart_from_components,
-#     indices_of_nearest_neighbors_from_distances,
-# )
-
 from json_data import json_loader
 
 

@@ -1,18 +1,8 @@
-I need three topics that create an evolutionary flow of discoveries, connecting the following start and end topics. Each topic should be a logical step in a sequence that progresses from the start to the end.
-
-Start Topic: birds
-End Topic: space ships
-
-Evolutionary Topics:
-1. flight
-2. airplanes
-3. rocket science
-
-Output Format: [topic1, topic2, topic3]
-
----
-
-Start Topic: [YOUR START TOPIC]
-End Topic: [YOUR END TOPIC]
-
-Evolutionary Topics:
+{
+    "task_content": "I need three topics that create an evolutionary flow of discoveries, connecting the following start and end topics. Each topic should be a logical step in a sequence that progresses from the start to the end.",
+    "task_example": "Start Topic: birds, End Topic: space ships, Evolutionary Topics: 1. flight 2. airplanes 3. rocket science",
+    "output_format": "Output Format: [topic1, topic2, topic3] ---",
+    "start_task": "Start Topic:",
+    "end_task": "End Topic:",
+    "chain_of_reasoning": "Evolutionary Topics:"
+}

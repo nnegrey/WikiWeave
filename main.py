@@ -1,10 +1,10 @@
 """Main"""
 
-import argparse
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
+import arg_parser
 from story_teller import story_teller
 from graph_traversal import graph_traversal
 from embeddings import wiki_fetch
@@ -49,38 +49,7 @@ class Main:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-s", "--start_item", help="The start point item to generate a story"
-    )
-    parser.add_argument(
-        "-sd",
-        "--start_description",
-        help="Additional information about the start item",
-        default=None,
-    )
-    parser.add_argument(
-        "-e", "--end_item", help="The target end point item in the evolutionary story"
-    )
-    parser.add_argument(
-        "-ed",
-        "--end_description",
-        help="Additional information about the end item",
-        default=None,
-    )
-    # Behavioral Changes to the program.
-    parser.add_argument(
-        "-gt", "--graph-traversal", help="Graph Traversal", default="link_generator"
-    )
-    parser.add_argument(
-        "-st", "--story-teller", help="Prompt Formatter", default="simple_story"
-    )
-    parser.add_argument("-c", "--call_openai", help="Call OpenAI", default=False)
-    parser.add_argument(
-        "-gtd", "--generate_test_dataset", help="Generate a test dataset", default=False
-    )
-
-    args = parser.parse_args()
+    args = arg_parser.parse_args()
     load_dotenv()
     openai_client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
     if args.generate_test_dataset:
