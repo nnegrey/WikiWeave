@@ -1,3 +1,5 @@
+"""Extends the StoryStrategy to Generate the story"""
+
 import os
 import pprint
 from dotenv import load_dotenv
@@ -8,15 +10,17 @@ from json_data import json_loader
 
 
 class SimpleStoryTeller(story_strategy.StoryStrategy):
+    """Porivdes a baseline story teller"""
+
     def __init__(self):
         load_dotenv()
         self.client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
         print("***** Simple Story Formatter *****")
         self.json_loader = json_loader.JsonLoader()
 
-    def generate_story(self, links, call_openai=False):
-        """Generate a story using the OpenAI API."""
-        prompt_messages = self.__format(links)
+    def generate_story(self, evolutionary_links, call_openai=False):
+        """Generates a story using the OpenAI API."""
+        prompt_messages = self.__format_the_prompt(evolutionary_links)
         print("Simple Story Formatter Prompt Messages:")
         for i, m in enumerate(prompt_messages):
             print(f"\t{i}: {m['content']}")
@@ -35,12 +39,7 @@ class SimpleStoryTeller(story_strategy.StoryStrategy):
         pprint.pprint(response["content"])
         return response
 
-    def __get_canned_response(self):
-        return self.json_loader.get_json(
-            "json_data/sample_output/open_ai_simple_story_response.json"
-        )
-
-    def __format(self, prompt_args):
+    def __format_the_prompt(self, evolutionary_links):
         json_prompt_data = self.json_loader.get_json("json_data/prompts/prompt.json")
         messages = []
         # Set up the Developer Role
@@ -75,6 +74,12 @@ class SimpleStoryTeller(story_strategy.StoryStrategy):
         # Provide the user input list of items
         messages.extend(
             {"role": "user", "content": f"Item {i + 1}: {item}"}
-            for i, item in enumerate(prompt_args)
+            for i, item in enumerate(evolutionary_links)
         )
         return messages
+
+    def __get_canned_response(self):
+        """Skip calls to OpenAI for faster development."""
+        return self.json_loader.get_json(
+            "json_data/sample_output/open_ai_simple_story_response.json"
+        )

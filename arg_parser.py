@@ -60,4 +60,19 @@ def parse_args():
         default=False,
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    __print_configurations(args)
+    return args
+
+
+def __print_configurations(args):
+    print("***** Input *****")
+    print(f"Start Item: {args.start_item}")
+    print(f"Start Description: {args.start_description}")
+    print(f"End Item: {args.end_item}")
+    print(f"End Description: {args.end_description}")
+    print("***** WikiWeave Configuration *****")
+    print(f"\tGraph Traversal Strategry: {args.graph_traversal}")
+    print(f"\tStory Teller Strategy: {args.story_teller}")
+    print(f"\tCall OpenAI: {args.call_openai}")
+    print("**********")
