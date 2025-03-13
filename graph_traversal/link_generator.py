@@ -7,9 +7,9 @@ from json_data import json_loader
 class LinkGenerator(traversal_strategy.TraversalStrategy):
     """LinkGenerator attempts to use AI to guess what the links would be between the two topics."""
 
-    def __init__(self, openai_client):
-        """Load environment variables from .env file and initialize the OpenAI client."""
+    def __init__(self, openai_client, call_openai=False):
         self.client = openai_client
+        self.call_openai = call_openai
         self.json_loader = json_loader.JsonLoader()
         print("\n***** Link Generator Traversal Strategy *****")
 
@@ -17,7 +17,6 @@ class LinkGenerator(traversal_strategy.TraversalStrategy):
         self,
         start,
         end,
-        call_openai=False,
         start_description=None,
         end_description=None,
     ):
@@ -29,7 +28,7 @@ class LinkGenerator(traversal_strategy.TraversalStrategy):
             print(f"\t{i}: {m['content']}")
 
         response = None
-        if call_openai:
+        if self.call_openai:
             completion = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 store=True,
@@ -41,13 +40,8 @@ class LinkGenerator(traversal_strategy.TraversalStrategy):
         else:
             response = self.__get_canned_response()
         # TODO: Parse the response better to get the links and the descriptions
-        # Also improve the prompt to get the output in the format I want
+        # TODO: Improve the prompt to get the output in the format I want
         return [start] + response["content"].split(",") + [end]
-
-    def __get_canned_response(self):
-        return self.json_loader.get_json(
-            "json_data/sample_output/open_ai_link_gen_response.json"
-        )
 
     def __get_prompt_messages(
         self, start, end, start_description=None, end_description=None
@@ -81,3 +75,9 @@ class LinkGenerator(traversal_strategy.TraversalStrategy):
                 }
             )
         return messages
+
+    def __get_canned_response(self):
+        """Skip calls to OpenAI for faster development."""
+        return self.json_loader.get_json(
+            "json_data/sample_output/open_ai_link_gen_response.json"
+        )

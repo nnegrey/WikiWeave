@@ -10,85 +10,111 @@ from json_data import json_loader
 
 
 class EmbeddingTraversal(traversal_strategy.TraversalStrategy):
-    def __init__(self, client, storage_layer):
+    """Embedding Traversal uses nearest neighbor search to find the evolutionary links
+    Implementation:
+    1) Embed the user input
+    2) Fetch the start / end wikipedia pages whose title's are the best match to the input.
+    3) From the start, use the current page's linked pages and compute the distance to the end page
+       via the summary embeddings
+    4) Cluster the results into 5 evolutionary topics and get a short summary for each
+    5) Return the evolutionary links
+    """
+
+    def __init__(self, client, storage_layer, call_openai=False):
         self.embed_gen = embedding_generator.EmbeddingGenerator(client)
         self.json_loader = json_loader.JsonLoader()
         self.storage_layer = storage_layer
+        self.call_openai = call_openai
         print("\n***** Embedding Traversal Strategy *****")
 
     def traverse(
         self,
         start,
         end,
-        call_openai=False,
         start_description=None,
         end_description=None,
     ):
         # Step 1: Embed user input
-        start_embed = None
-        end_embed = None
-        start_desc_embed = None
-        end_desc_embed = None
-        if call_openai:
-            start_embed = self.embed_gen.embed_user_input(start)
-            end_embed = self.embed_gen.embed_user_input(end)
-            if start_description:
-                start_desc_embed = self.embed_gen.embed_user_input(start_description)
-            if end_description:
-                end_desc_embed = self.embed_gen.embed_user_input(end_description)
-        else:
-            prepped_embeddings = self.__get_canned_start_end_embeddings()
-            start_embed = prepped_embeddings["start_input"]
-            end_embed = prepped_embeddings["end_input"]
-
-        # Step 2: Fetch start nodes linked embeddings
-        start_node, end_node = self.storage_layer.find_start_and_end_nodes(
-            start_embed, end_embed
+        (start_embed, start_desc_embed, end_embed, end_desc_embed) = (
+            self.__get_user_input_embeddings(
+                start, start_description, end, end_description
+            )
         )
 
-        print(f"Start Point: {start_node["id"]}, {start_node["title"]}")
-        print(f"End Point: {end_node["id"]}, {end_node["title"]}")
+        # Step 2: Fetch start nodes linked embeddings
+        (start_page, end_page) = self.__get_start_and_end_pages(start_embed, end_embed)
 
-        curr_node = start_node
-        path = [curr_node["title"]]
+        print(f"Start Point: {start_page["id"]}, {start_page["title"]}")
+        print(f"End Point: {end_page["id"]}, {end_page["title"]}")
+
+        # Step 3: Traverse the linked pages
         visited_titles = []
-        while end_node["title"] not in path and len(path) < 10:
-            visited_titles.append(curr_node["title"])
-            links = self.storage_layer.get_links(curr_node["id"])
+        curr_page = start_page
+        while curr_page and len(visited_titles) < 10:
+            visited_titles.append(curr_page["title"])
 
-            if end_node["title"] in links:
-                path.append(end_node["title"])
+            if end_page["title"] in curr_page["linked_titles"]:
+                visited_titles.append(end_page["title"])
                 break
 
             title_embeddings = []
-            titles = []
-            for link in links:
+            for link in curr_page["linked_titles"]:
                 if link in visited_titles:
                     continue
-                embedding_str = self.storage_layer.get_embedding_str(link)
-                if embedding_str:
-                    try:
-                        embedding_list = ast.literal_eval(embedding_str)
-                        title_embeddings.append(np.array(embedding_list))
-                        titles.append(link)
-                    except (ValueError, SyntaxError) as e:
-                        print(f"Error parsing title embedding string: {e}")
-                        return None
-
+                embedding = self.storage_layer.get_title_embedding(link)
+                if embedding:
+                    title_embeddings.append(np.array(embedding))
             title_embeddings = np.array(title_embeddings)
-
             # Calculate cosine similarities
             similarities = cosine_similarity(
-                [np.array(ast.literal_eval(end_node["title_embedding"]))],
+                [np.array(end_page["title_embedding"])],
                 title_embeddings,
             )[0]
 
             # Find the best match
             best_match = np.argmax(similarities)
-            curr_node = self.storage_layer.get_path_node_from_title(titles[best_match])
-            path.append(curr_node["title"])
-        # TODO: Cluster embedding results into 5 clusters, summarize the clusters
-        return path
+            curr_page = self.storage_layer.get_path_node_from_title(
+                curr_page["linked_titles"][best_match]
+            )
+        # TODO: Step 4: Cluster embedding results into 5 clusters, summarize the clusters
+        # Step 5: Return the evolutionary links
+        return visited_titles
+
+    def __get_user_input_embeddings(
+        self, start_input, start_description_input, end_input, end_description_input
+    ):
+        """Embeds the user input"""
+        start_embed = None
+        end_embed = None
+        start_desc_embed = None
+        end_desc_embed = None
+        if self.call_openai:
+            start_embed = self.embed_gen.embed_user_input(start_input)
+            end_embed = self.embed_gen.embed_user_input(end_input)
+            if start_description_input:
+                start_desc_embed = self.embed_gen.embed_user_input(
+                    start_description_input
+                )
+            if end_description_input:
+                end_desc_embed = self.embed_gen.embed_user_input(end_description_input)
+        else:
+            prepped_embeddings = self.__get_canned_start_end_embeddings()
+            start_embed = prepped_embeddings["start_input"]
+            end_embed = prepped_embeddings["end_input"]
+        return (start_embed, start_desc_embed, end_embed, end_desc_embed)
+
+    def __get_start_and_end_pages(self, start_embed, end_embed):
+        """For now simply check the whole database to find the best match, because it is a super
+        small test dataset.
+        """
+        # TODO: Setup cluster partitions in the database, so that I can request the cluster
+        # embeddings and do the distance on each cluster, then use the cluster_id to find the next
+        # cluster until we to a point where we only need to look at some X pages for distance
+        # computation.
+        (start_page, end_node) = self.storage_layer.find_start_and_end_pages(
+            start_embed, end_embed
+        )
+        return (start_page, end_node)
 
     def __get_canned_start_end_embeddings(self):
         return self.json_loader.get_json(

@@ -18,10 +18,8 @@ class WikiWeave:
             f"Finding the linked path between the two items: {args.start_item}, {args.end_item}\n"
         )
         items = graph_traversal.GraphTraversal(
-            args.graph_traversal,
-            self.client,
-            self.storage_layer,
-        ).find_linked_path(args.start_item, args.end_item, args.call_openai)
+            args.graph_traversal, self.client, self.storage_layer, args.call_openai
+        ).find_linked_path(args.start_item, args.end_item)
 
         print(f"\nLinked Items: {items}\n")
         print("\nWeaving the story...")

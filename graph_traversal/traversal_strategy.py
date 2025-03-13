@@ -8,6 +8,6 @@ class TraversalStrategy(ABC):
     stratagies"""
 
     @abstractmethod
-    def traverse(self, start, end, call_openai):
+    def traverse(self, start, end):
         """Given a start and end topic, find the linked path between the two"""
         pass

@@ -49,13 +49,12 @@ class StorageLayer:
         # Find the best match
         return np.argmax(similarities)
 
-    def find_start_and_end_nodes(self, start_embedding_input, end_embedding_input):
+    def find_start_and_end_pages(self, start_embedding_input, end_embedding_input):
         """Find most relevant entries in DB with embeddings based on title, I don't like having
         logic in my storage layer, but I have to come up with a better solution later.
 
         Returns a tuple of the start and end nodes
         """
-
         start_best_match_index = self.__get_embeddigns_best_match_index(
             start_embedding_input
         )
@@ -64,20 +63,8 @@ class StorageLayer:
         )
 
         return (
-            {
-                "id": self.pages_df.iloc[start_best_match_index]["id"],
-                "title": self.pages_df.iloc[start_best_match_index]["title"],
-                "title_embedding": self.embeddings_df.iloc[start_best_match_index][
-                    "title_embedding"
-                ],
-            },
-            {
-                "id": self.pages_df.iloc[end_best_match_index]["id"],
-                "title": self.pages_df.iloc[end_best_match_index]["title"],
-                "title_embedding": self.embeddings_df.iloc[end_best_match_index][
-                    "title_embedding"
-                ],
-            },
+            self.__get_page_as_json(start_best_match_index),
+            self.__get_page_as_json(end_best_match_index),
         )
 
     # TODO: Probably switch this to id later and store the list of ids instead of titles
@@ -93,25 +80,47 @@ class StorageLayer:
 
     def get_path_node_from_title(self, title):
         row = self.pages_df[self.pages_df["title"] == title]
+        _id = row.iloc[0]["id"]
         return {
-            "id": row.iloc[0]["id"],
+            "id": _id,
             "title": row.iloc[0]["title"],
-            "title_embedding": self.embeddings_df.iloc[row.iloc[0]["id"]][
-                "title_embedding"
-            ],
+            "summary": row.iloc[0]["summary"],
+            "title_embedding": ast.literal_eval(
+                self.embeddings_df.iloc[_id]["title_embedding"]
+            ),
+            "summary_embedding": ast.literal_eval(
+                self.embeddings_df.iloc[_id]["summary_embedding"]
+            ),
+            "linked_titles": ast.literal_eval(self.links_df.iloc[_id]["linked_titles"]),
         }
 
     def get_links(self, _id):
         return ast.literal_eval(self.links_df.iloc[_id]["linked_titles"])
 
-    def get_embedding_str(self, title):
+    def get_title_embedding(self, title):
         try:
             row = self.pages_df[self.pages_df["title"] == title]
 
             if not row.empty:
-                return self.embeddings_df.iloc[row.iloc[0]["id"]]["title_embedding"]
+                return ast.literal_eval(
+                    self.embeddings_df.iloc[row.iloc[0]["id"]]["title_embedding"]
+                )
             else:
                 return None
 
         except KeyError:
             return None  # Handle missing column
+
+    def __get_page_as_json(self, _id):
+        return {
+            "id": self.pages_df.iloc[_id]["id"],
+            "title": self.pages_df.iloc[_id]["title"],
+            "summary": self.pages_df.iloc[_id]["summary"],
+            "title_embedding": ast.literal_eval(
+                self.embeddings_df.iloc[_id]["title_embedding"]
+            ),
+            "summary_embedding": ast.literal_eval(
+                self.embeddings_df.iloc[_id]["summary_embedding"]
+            ),
+            "linked_titles": ast.literal_eval(self.links_df.iloc[_id]["linked_titles"]),
+        }
