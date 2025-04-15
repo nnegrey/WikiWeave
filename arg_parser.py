@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument(
         "-gt",
         "--graph-traversal",
-        help="Graph Traversal Stratigies: [link_generator, embedding_traversal]",
+        help="Graph Traversal Stratigies: [link_generator, embedding_traversal, random_traversal]",
         default="link_generator",
     )
     parser.add_argument(
