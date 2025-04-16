@@ -21,7 +21,7 @@ class SimpleStoryTeller(story_strategy.StoryStrategy):
     def generate_story(self, evolutionary_links, call_openai=False):
         """Generates a story using the OpenAI API."""
         prompt_messages = self.__format_the_prompt(evolutionary_links)
-        print("Simple Story Formatter Prompt Messages:")
+        print("\nSimple Story Formatter Prompt Messages:")
         for i, m in enumerate(prompt_messages):
             print(f"\t{i}: {m['content']}")
 
@@ -36,6 +36,8 @@ class SimpleStoryTeller(story_strategy.StoryStrategy):
             response = {"content": completion.choices[0].message.content}
         else:
             response = self.__get_canned_response()
+
+        print("\n\nThe woven wiki:")
         pprint.pprint(response["content"])
         return response
 
@@ -73,7 +75,10 @@ class SimpleStoryTeller(story_strategy.StoryStrategy):
         )
         # Provide the user input list of items
         messages.extend(
-            {"role": "user", "content": f"Item {i + 1}: {item}"}
+            {
+                "role": "user",
+                "content": f"Item {i + 1}: {item["title"]}: {item['summary']}",
+            }
             for i, item in enumerate(evolutionary_links)
         )
         return messages

@@ -56,8 +56,8 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
             """
             mycursor.execute(get_random_start_and_end_page_sql)
             start_and_end_page_records = mycursor.fetchall()
-            for row in start_and_end_page_records:
-                print(row)
+            # for row in start_and_end_page_records:
+            #     print(row)
 
             # Step 2: Fetch start/end nodes linked embeddings
             get_embeddings_sql = f"""
@@ -101,36 +101,44 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
                     )
                 ],
             }
-            print(start_page["id"], start_page["title"], start_page["summary"])
-            print(end_page["id"], end_page["title"], end_page["summary"])
+            # print(start_page["id"], start_page["title"], start_page["summary"])
+            # print(end_page["id"], end_page["title"], end_page["summary"])
+            print(start_page["id"], start_page["title"])
+            print(end_page["id"], end_page["title"])
 
             # Step 3: Traverse the linked pages
-            visited_titles = []
+            visited_ids = []
+            visited_nodes = []
             curr_page = start_page
-            while curr_page and len(visited_titles) < 10:
-                visited_titles.append(curr_page["id"])
+            while curr_page and len(visited_ids) < 10:
+                visited_ids.append(curr_page["id"])
+                visited_nodes.append(curr_page)
 
                 curr_page_links = self.get_page_links(mycursor, curr_page["id"])
 
                 if end_page["id"] in curr_page_links:
-                    visited_titles.append(end_page["id"])
+                    visited_ids.append(end_page["id"])
+                    visited_nodes.append(end_page)
                     break
 
-                title_embeddings = []
                 page_ids_to_get = []
                 for page_id in curr_page_links:
-                    if page_id in visited_titles:
+                    if page_id in visited_ids:
                         continue
                     page_ids_to_get.append(page_id)
-                embeddings = self.get_page_embeddings(mycursor, page_ids_to_get)
-                if embeddings:
-                    for emb_str in embeddings:
-                        # title_embeddings.append(np.array(json.loads(emb_str)))
+
+                pages_and_embeddings = self.get_page_embeddings(
+                    mycursor, page_ids_to_get
+                )
+                title_embeddings = []
+                if pages_and_embeddings:
+                    for page_and_embedding in pages_and_embeddings:
                         embedding_list_of_floats = [
-                            float(val) for val in json.loads(emb_str)
+                            float(val)
+                            for val in json.loads(page_and_embedding["embedding"])
                         ]
+
                         title_embeddings.append(np.array(embedding_list_of_floats))
-                    # title_embeddings.append(np.array(embedding))
                 title_embeddings = np.array(title_embeddings)
                 # Calculate cosine similarities
                 similarities = cosine_similarity(
@@ -140,13 +148,27 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
 
                 # Find the best match
                 best_match = np.argmax(similarities)
-                curr_page = self.get_next_node(mycursor, curr_page_links[best_match])
-                print(best_match, curr_page)
+                curr_page = pages_and_embeddings[best_match]
+                # print(
+                #     best_match,
+                #     curr_page["id"],
+                #     curr_page["title"],
+                #     curr_page["summary"],
+                # )
             # TODO: Step 4: Cluster embedding results into 5 clusters, summarize the clusters
             # Step 5: Return the evolutionary links
             mycursor.close()
             mydb.close()
-            return visited_titles
+
+            # TODO: Actually try to trace the whole linked path, but for now cut short at 10 nodes
+            # and append the end.
+            visited_nodes.append(end_page)
+
+            print("\nEvolutionary Links:")
+            for node in visited_nodes:
+                print(node["id"], node["title"])
+
+            return visited_nodes
         except mysql.connector.Error as err:
             print(f"Error connecting or interacting with MySQL: {err}")
         finally:
@@ -167,84 +189,67 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
         WHERE
             pl_from = {page_id}
         """
-        print(get_page_links_sql)
+        # print(get_page_links_sql)
         mycursor.execute(get_page_links_sql)
         page_link_records = mycursor.fetchall()
         link_ids = [row[0] for row in page_link_records]
-        print(link_ids)
+        # print(link_ids)
         return link_ids
 
     def get_page_embeddings(self, mycursor, page_ids):
         formatted_page_ids = ", ".join(map(str, page_ids))
         get_page_title_sql = f"""
         SELECT
+            page_id,
             page_title
         FROM
             page
         WHERE
             page_id IN ({formatted_page_ids})
+            AND page_namespace = 0
+            AND page_is_redirect = 0
         """
-        print(get_page_title_sql)
+        # print(get_page_title_sql)
         mycursor.execute(get_page_title_sql)
         page_title_records = mycursor.fetchall()
-        for row in page_title_records:
-            print(row)
+        # for row in page_title_records:
+        #     print(row)
 
         formatted_page_titles = ", ".join(
             map(
                 str,
                 [
-                    f"'{self.escape_sql_string(row[0].decode("utf-8"))}'"
+                    f"'{self.escape_sql_string(row[1].decode("utf-8"))}'"
                     for row in page_title_records
                 ],
             )
         )
         get_page_embedding_sql = f"""
         SELECT
+            title,
+            content,
             embedding
         FROM
             page_embeddings
         WHERE
             title IN ({formatted_page_titles})
         """
-        print(get_page_embedding_sql)
+        # print(get_page_embedding_sql)
         mycursor.execute(get_page_embedding_sql)
         page_embedding_records = mycursor.fetchall()
-        embeddings = [row[0] for row in page_embedding_records]
+
+        pages_and_embeddings = []
+        for page_embedding_record in page_embedding_records:
+            for page_title_record in page_title_records:
+                if page_embedding_record[0] == page_title_record[1].decode("utf-8"):
+                    pages_and_embeddings.append(
+                        {
+                            "id": page_title_record[0],
+                            "title": page_title_record[1].decode("utf-8"),
+                            "summary": page_embedding_record[1],
+                            "embedding": page_embedding_record[2],
+                        }
+                    )
+                    break
         # print(embeddings[0])
-        return embeddings
-
-    def get_next_node(self, mycursor, page_id):
-        get_page_title_sql = f"""
-        SELECT
-            page_title
-        FROM
-            page
-        WHERE
-            page_id = {page_id}
-        """
-        print(get_page_title_sql)
-        mycursor.execute(get_page_title_sql)
-        page_title_record = mycursor.fetchall()
-        print(page_title_record)
-        get_page_embedding_sql = f"""
-        SELECT
-            content,
-            embedding
-        FROM
-            page_embeddings
-        WHERE
-            title = '{self.escape_sql_string(page_title_record[0][0].decode('utf-8'))}'
-        """
-        print(get_page_embedding_sql)
-        mycursor.execute(get_page_embedding_sql)
-        page_embedding_record = mycursor.fetchall()
-        for row in page_embedding_record:
-            print(row)
-
-        return {
-            "id": page_id,
-            "title": page_title_record[0][0],
-            "summary": page_embedding_record[0][0],
-            "embedding": page_embedding_record[0][1],
-        }
+        return pages_and_embeddings

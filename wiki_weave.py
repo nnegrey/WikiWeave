@@ -21,7 +21,10 @@ class WikiWeave:
             args.graph_traversal, self.client, self.storage_layer, args.call_openai
         ).find_linked_path(args.start_item, args.end_item)
 
-        print(f"\nLinked Items: {items}\n")
+        if len(items) < 10:
+            return
+
+        # print(f"\nLinked Items: {items}\n")
         print("\nWeaving the story...")
         story_teller.StoryTeller(args.story_teller).generate_story(
             items, args.call_openai

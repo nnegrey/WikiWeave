@@ -68,10 +68,13 @@ WHERE
 
 embededing_sql = """
 SELECT
-    *
+    title,
+    content,
+    embedding
 FROM
     page_embeddings
-LIMIT 10
+WHERE
+    title IN ('Arthur_C._Clarke', 'Custard', 'English_Channel', 'National_Women''s_Hockey_League_(1999–2007)', 'Thyroid_cancer', 'Mark_Knopfler', 'Young_Frankenstein', 'Agarn', 'Brooks_Brothers')
 """
 
 lazy_random_record_sql = """
@@ -112,7 +115,7 @@ WHERE
 """
 
 
-mycursor.execute(pages)
+mycursor.execute(embededing_sql)
 
 results = mycursor.fetchall()
 for row in results:
