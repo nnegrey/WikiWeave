@@ -102,20 +102,30 @@ page_links = """
 FROM
     pagelinks
 WHERE
-    pl_from = 869213
+    pl_from = 7284
 """
 
 pages = """
 SELECT
-    page_title
+    *
 FROM
-    page
+    linktarget
 WHERE
-    page_id = 869213
+    lt_id IN(12213, 12217, 41018, 206177, 208972, 215368, 427391, 427421, 427423)
 """
 
+# (7284, 0, 12213)
+# (7284, 0, 12217)
+# (7284, 0, 41018)
+# (7284, 0, 206177)
+# (7284, 0, 208972)
+# (7284, 0, 215368)
+# (7284, 0, 427391)
+# (7284, 0, 427421)
+# (7284, 0, 427423)
 
-mycursor.execute(embededing_sql)
+
+mycursor.execute(pages)
 
 results = mycursor.fetchall()
 for row in results:
