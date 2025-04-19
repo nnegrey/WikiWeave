@@ -27,6 +27,8 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
     5) Return the evolutionary links
     """
 
+    RANDOM_STARRT_AND_END_SQL_PATH = "graph_traversal/random_start_and_end_page.sql"
+
     def __init__(self, storage_layer):
         self.storage_layer = storage_layer
         print("\n***** RandomStartAndEnd Traversal Strategy *****")
@@ -42,67 +44,18 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
             mycursor = mydb.cursor()
 
             # Step 1: Get two random points
-            get_random_start_and_end_page_sql = """
-                SELECT
-                    *
-                FROM
-                    page
-                WHERE
-                    page_namespace = 0
-                    AND page_is_redirect = 0
-                    AND page_random >= RAND()
-                ORDER BY page_random
-                LIMIT 2;
-            """
-            mycursor.execute(get_random_start_and_end_page_sql)
-            start_and_end_page_records = mycursor.fetchall()
-            # for row in start_and_end_page_records:
-            #     print(row)
-
             # Step 2: Fetch start/end nodes linked embeddings
-            get_embeddings_sql = f"""
-                SELECT
-                    *
-                FROM
-                    page_embeddings
-                WHERE
-                    title = '{self.escape_sql_string(start_and_end_page_records[0][2].decode('utf-8'))}'
-                    OR title = '{self.escape_sql_string(start_and_end_page_records[1][2].decode('utf-8'))}'
-            """
-            mycursor.execute(get_embeddings_sql)
-            start_and_end_page_embedding_records = mycursor.fetchall()
-            s_idx = 0
-            e_idx = 1
-            if (
-                start_and_end_page_records[0][2]
-                != start_and_end_page_embedding_records[0][0]
-            ):
-                s_idx = 1
-                e_idx = 0
-            start_page = {
-                "id": start_and_end_page_records[0][0],
-                "title": start_and_end_page_records[0][2],
-                "summary": start_and_end_page_embedding_records[s_idx][1],
-                "embedding": [
-                    float(val)
-                    for val in json.loads(
-                        start_and_end_page_embedding_records[s_idx][2]
-                    )
-                ],
-            }
-            end_page = {
-                "id": start_and_end_page_records[1][0],
-                "title": start_and_end_page_records[1][2],
-                "summary": start_and_end_page_embedding_records[e_idx][1],
-                "embedding": [
-                    float(val)
-                    for val in json.loads(
-                        start_and_end_page_embedding_records[e_idx][2]
-                    )
-                ],
-            }
-            # print(start_page["id"], start_page["title"], start_page["summary"])
-            # print(end_page["id"], end_page["title"], end_page["summary"])
+            # TODO: Make sure we always get two results with content and embedding
+            start_and_end_page_embedding_records = self.__execute_sql_from_file(
+                mycursor, self.RANDOM_STARRT_AND_END_SQL_PATH
+            )
+
+            start_page = self.__get_page_node_from_record(
+                start_and_end_page_embedding_records, 0
+            )
+            end_page = self.__get_page_node_from_record(
+                start_and_end_page_embedding_records, 1
+            )
             print(start_page["id"], start_page["title"])
             print(end_page["id"], end_page["title"])
 
@@ -253,3 +206,28 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
                     break
         # print(embeddings[0])
         return pages_and_embeddings
+
+    def __execute_sql_from_file(self, cursor, file_path):
+        try:
+            with open(file_path, "r") as file:
+                sql_script = file.read().strip()
+                if sql_script:
+                    cursor.execute(sql_script)
+                    if cursor.with_rows:
+                        return cursor.fetchall()
+                    else:
+                        print(f"Executed: {sql_script}")
+                        return None
+        except FileNotFoundError:
+            print(f"Error: SQL file not found at {file_path}")
+        except mysql.connector.Error as err:
+            print(f"MySQL Error: {err}")
+
+    def __get_page_node_from_record(self, records, idx):
+        """Converts a database record into a page node."""
+        return {
+            "id": records[idx][0],
+            "title": records[idx][1],
+            "summary": records[idx][2],
+            "embedding": [float(val) for val in json.loads(records[idx][3])],
+        }
