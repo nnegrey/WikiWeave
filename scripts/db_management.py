@@ -114,20 +114,60 @@ WHERE
     lt_id IN(12213, 12217, 41018, 206177, 208972, 215368, 427391, 427421, 427423)
 """
 
+simplified_sql = """
+WITH target_links AS (
+    SELECT
+        pl_target_id
+    FROM
+        pagelinks
+    WHERE
+        pl_from = 59165
+),
+page_titles AS (
+    SELECT
+        linktarget.lt_title
+    FROM linktarget
+    JOIN target_links ON linktarget.lt_id = target_links.pl_target_id
+    WHERE lt_namespace = 0
+)
+SELECT
+    page.page_id,
+    CONVERT(page.page_title USING utf8) AS page_title,
+    pe.content,
+    pe.embedding
+FROM
+    page
+    JOIN page_titles
+        ON page.page_title = page_titles.lt_title
+    JOIN page_embeddings pe
+        ON CONVERT(page.page_title USING utf8) = pe.title
+WHERE
+    page.page_namespace = 0
+    AND page.page_is_redirect = 0
+"""
 
 
-# (7284, 0, 12213)
-# (7284, 0, 12217)
-# (7284, 0, 41018)
-# (7284, 0, 206177)
-# (7284, 0, 208972)
-# (7284, 0, 215368)
-# (7284, 0, 427391)
-# (7284, 0, 427421)
-# (7284, 0, 427423)
+# ('United_States',)
+# ('Australia',)
+# ('Europe',)
+# ('Asia',)
+# ('Illinois',)
+# ('Canada',)
+# ('1935',)
+# ('USA',) -- redirect to United_States
+# ('Motorcycle_club',) -- no page
+# ('Mc_Cook',) -- no page
+
+# (27, 'Australia')
+# (216, 'Europe')
+# (1994, 'Asia')
+# (8260, '1935')
+# (11192, 'Illinois')
+# (219587, 'United_States')
+# (219589, 'Canada')
 
 
-mycursor.execute(pages)
+mycursor.execute(embededing_sql)
 
 results = mycursor.fetchall()
 for row in results:
