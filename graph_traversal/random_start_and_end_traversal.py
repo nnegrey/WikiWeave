@@ -46,7 +46,6 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
 
             # Step 1: Get two random points
             # Step 2: Fetch start/end nodes linked embeddings
-            # TODO: Make sure we always get two results with content and embedding
             start_and_end_page_embedding_records = []
             while len(start_and_end_page_embedding_records) < 2:
                 start_and_end_page_embedding_records = self.__execute_sql_from_file(
