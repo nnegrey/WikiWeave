@@ -1,0 +1,114 @@
+Once upon a time, in the bustling world of cinema, there existed a magical artifact called *Mother_Didn't_Tell_Me*, a delightful 1950 comedy that danced with laughter and mischief under the flickering lights of the silver screen. Its whimsical narrative and comedic charm enchanted audiences everywhere. But little did they know, this unassuming film carried the potential for transformation, whispered by the winds of creativity through the realm of movie lore.
+
+The stars of this film, enchanted by their beauty, became the first embers of a massive constellation known as *AllMovie*. This celestial database emerged, sprouting from the essence of those performances, cataloguing not just *Mother Didnt Tell Me* but thousands of cinematic treasures, each with its own flickering light. The creators dared to dream, fostering an archive where the vivid hues of filmmaking could be preserved for generations. The joy of magic and memory intertwined, birthing a whole new universe where fans could explore actors and stories like never before.
+
+In the heart of this passionate endeavor, the universe crafted a bridge—a melodic link—to its sibling, *AllMusic*. These musical muses, summoned by Michael Erlewine and his mathematician counterpart, began weaving soundtracks out of the visual tapestries once depicted by *AllMovie*. A riot of notes and rhythms soon resonated through the vast halls of entertainment, where music became the heartbeat of storytelling. Each film that played released a soundscape, giving audiences the experience of both visual tales and lyrical journeys, like a treasure chest overflowing with wonders just waiting to be explored.
+
+However, what goes up must come down! Then came the time when all records and memories needed to be safeguarded from the relentless march of time. Thus, in the ethereal realms of cyberspace, there sprouted the illustrious *Wayback Machine*. Conceived in the early 2000s, this magnificent invention of the Internet Archive allowed the echoes of AllMusic and AllMovie to be preserved in the grand tapestry of the digital age. The *Wayback Machine* became a time-bending vessel, capturing web pages and moments from the past, inviting both the curious and the nostalgic to venture back into times long forgotten.
+
+With time, the tapestries of stories and sounds grew vast and expansive, and the great guardian, *Internet Archive*, emerged. A library unlike any other, filled to the brim with delightful curiosities. Brewster Kahle and Aaron Swartz guarded this colossal fortress with dedication, turning pages into pixels. The grand arch of the Internet Archive pulled threads from both music and film, weaving them into a rich tapestry that spanned all corners of entertainment, allowing people to touch history, read stories lost to the winds of time, and listen to tunes that had once faded into silence.
+
+From this marvel, inhabitants of the digital sphere populated the vast cosmos known as the *Internet*, with its myriad of connections and communities enriching life. It was a metropolis of knowledge, collaboration, and delightful absurdity where the old met new, where dreams took form and speculation became reality. Each site was itself a portal, a dazzling entrance to thousands of realms and ideas where information flowed seamlessly.
+
+Among these portals blossomed a new sun—a shining *Web Portal*. This gathering of virtual marvels became a lens through which users could glimpse the wonders of the Internet, from academic insights to the latest cat video trends. Portals emerged for every interest, merging communities and illuminating pathways for exploration guided by their curiosity. Elevating them all within its gleaming embrace was the entertainment giant, the one and only *The Walt Disney Company*.
+
+Now, on the horizon, as dreams and imaginations evolved, one of the most renowned names from the vibrant Disney landscape took unto itself a guiding force—Michael Eisner. From 1984 to 2005, with a flick of a wand and a wave of his pen, Eisner led the company through storms of creativity and financial rebirth, linking various franchises into a kaleidoscope that dazzled fans worldwide. He encapsulated the spirit of ingenuity within the walls of Disneyland, making dreams come true for people of every age.
+
+The enchanting realm of Disney birthed a spectacular offspring known as *Hollywood Records*, a label that churned new melodies into existence, harboring the rhythm of youth and the echoes of generations before. It sang with the voices of rising stars, each a unique note in the grand orchestration of sound—Demi Lovato, Jessie McCartney—the melodies woven across the fabric of fame.
+
+And thus, through a delightful journey of surprises, absurdities, and layers of creation, the final thread in this tapestry unraveled itself into a rock band—the irrepressible *Fastball*. Born from the vibrant moments shared in the echo chambers of music, this Texas trio strutted onto the stage, combining rich storytelling with poignant melodies that struck every chord from the hearts of fans, gaining fame with their anthems and lyrics that told tales of life's ups and downs.
+
+And so, from the humble beginnings of a comedic film to the exuberant chords of a rock band, this whimsical journey taught us that every idea, like every story and every note, has the power to connect—creating a mosaic of shared experiences that transcends time and space, inviting us to laugh, dream, and sing once more.
+
+
+The woven wiki:
+('Once upon a time, in the bustling world of cinema, there existed a magical '
+ "artifact called *Mother_Didn't_Tell_Me*, a delightful 1950 comedy that "
+ 'danced with laughter and mischief under the flickering lights of the silver '
+ 'screen. Its whimsical narrative and comedic charm enchanted audiences '
+ 'everywhere. But little did they know, this unassuming film carried the '
+ 'potential for transformation, whispered by the winds of creativity through '
+ 'the realm of movie lore.\n'
+ '\n'
+ 'The stars of this film, enchanted by their beauty, became the first embers '
+ 'of a massive constellation known as *AllMovie*. This celestial database '
+ 'emerged, sprouting from the essence of those performances, cataloguing not '
+ 'just *Mother Didnt Tell Me* but thousands of cinematic treasures, each with '
+ 'its own flickering light. The creators dared to dream, fostering an archive '
+ 'where the vivid hues of filmmaking could be preserved for generations. The '
+ 'joy of magic and memory intertwined, birthing a whole new universe where '
+ 'fans could explore actors and stories like never before.\n'
+ '\n'
+ 'In the heart of this passionate endeavor, the universe crafted a bridge—a '
+ 'melodic link—to its sibling, *AllMusic*. These musical muses, summoned by '
+ 'Michael Erlewine and his mathematician counterpart, began weaving '
+ 'soundtracks out of the visual tapestries once depicted by *AllMovie*. A riot '
+ 'of notes and rhythms soon resonated through the vast halls of entertainment, '
+ 'where music became the heartbeat of storytelling. Each film that played '
+ 'released a soundscape, giving audiences the experience of both visual tales '
+ 'and lyrical journeys, like a treasure chest overflowing with wonders just '
+ 'waiting to be explored.\n'
+ '\n'
+ 'However, what goes up must come down! Then came the time when all records '
+ 'and memories needed to be safeguarded from the relentless march of time. '
+ 'Thus, in the ethereal realms of cyberspace, there sprouted the illustrious '
+ '*Wayback Machine*. Conceived in the early 2000s, this magnificent invention '
+ 'of the Internet Archive allowed the echoes of AllMusic and AllMovie to be '
+ 'preserved in the grand tapestry of the digital age. The *Wayback Machine* '
+ 'became a time-bending vessel, capturing web pages and moments from the past, '
+ 'inviting both the curious and the nostalgic to venture back into times long '
+ 'forgotten.\n'
+ '\n'
+ 'With time, the tapestries of stories and sounds grew vast and expansive, and '
+ 'the great guardian, *Internet Archive*, emerged. A library unlike any other, '
+ 'filled to the brim with delightful curiosities. Brewster Kahle and Aaron '
+ 'Swartz guarded this colossal fortress with dedication, turning pages into '
+ 'pixels. The grand arch of the Internet Archive pulled threads from both '
+ 'music and film, weaving them into a rich tapestry that spanned all corners '
+ 'of entertainment, allowing people to touch history, read stories lost to the '
+ 'winds of time, and listen to tunes that had once faded into silence.\n'
+ '\n'
+ 'From this marvel, inhabitants of the digital sphere populated the vast '
+ 'cosmos known as the *Internet*, with its myriad of connections and '
+ 'communities enriching life. It was a metropolis of knowledge, collaboration, '
+ 'and delightful absurdity where the old met new, where dreams took form and '
+ 'speculation became reality. Each site was itself a portal, a dazzling '
+ 'entrance to thousands of realms and ideas where information flowed '
+ 'seamlessly. \n'
+ '\n'
+ 'Among these portals blossomed a new sun—a shining *Web Portal*. This '
+ 'gathering of virtual marvels became a lens through which users could glimpse '
+ 'the wonders of the Internet, from academic insights to the latest cat video '
+ 'trends. Portals emerged for every interest, merging communities and '
+ 'illuminating pathways for exploration guided by their curiosity. Elevating '
+ 'them all within its gleaming embrace was the entertainment giant, the one '
+ 'and only *The Walt Disney Company*.\n'
+ '\n'
+ 'Now, on the horizon, as dreams and imaginations evolved, one of the most '
+ 'renowned names from the vibrant Disney landscape took unto itself a guiding '
+ 'force—Michael Eisner. From 1984 to 2005, with a flick of a wand and a wave '
+ 'of his pen, Eisner led the company through storms of creativity and '
+ 'financial rebirth, linking various franchises into a kaleidoscope that '
+ 'dazzled fans worldwide. He encapsulated the spirit of ingenuity within the '
+ 'walls of Disneyland, making dreams come true for people of every age.\n'
+ '\n'
+ 'The enchanting realm of Disney birthed a spectacular offspring known as '
+ '*Hollywood Records*, a label that churned new melodies into existence, '
+ 'harboring the rhythm of youth and the echoes of generations before. It sang '
+ 'with the voices of rising stars, each a unique note in the grand '
+ 'orchestration of sound—Demi Lovato, Jessie McCartney—the melodies woven '
+ 'across the fabric of fame.\n'
+ '\n'
+ 'And thus, through a delightful journey of surprises, absurdities, and layers '
+ 'of creation, the final thread in this tapestry unraveled itself into a rock '
+ 'band—the irrepressible *Fastball*. Born from the vibrant moments shared in '
+ 'the echo chambers of music, this Texas trio strutted onto the stage, '
+ 'combining rich storytelling with poignant melodies that struck every chord '
+ 'from the hearts of fans, gaining fame with their anthems and lyrics that '
+ "told tales of life's ups and downs. \n"
+ '\n'
+ 'And so, from the humble beginnings of a comedic film to the exuberant chords '
+ 'of a rock band, this whimsical journey taught us that every idea, like every '
+ 'story and every note, has the power to connect—creating a mosaic of shared '
+ 'experiences that transcends time and space, inviting us to laugh, dream, and '
+ 'sing once more. ')

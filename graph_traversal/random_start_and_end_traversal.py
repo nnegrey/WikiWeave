@@ -59,44 +59,39 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
 
             # Step 3: Traverse the linked pages
             visited_ids = []
-            visited_nodes = []
-            curr_page = start_page
-            while curr_page and len(visited_ids) < 10:
-                visited_ids.append(curr_page["id"])
-                visited_nodes.append(curr_page)
+            front_visited_nodes = []
+            end_visited_nodes = []
+            page_queue = [(start_page, end_page)]
+            while len(page_queue) > 0:
+                curr_front_page, curr_end_page = page_queue.pop(0)
+                print(
+                    f"Visiting: {curr_front_page['id']} - {curr_front_page['title']} and {curr_end_page['id']} - {curr_end_page['title']}"
+                )
+                if (
+                    curr_front_page["id"] in visited_ids
+                    or curr_end_page["id"] in visited_ids
+                ):
+                    continue
+                if curr_front_page["id"] == curr_end_page["id"]:
+                    front_visited_nodes.append(curr_front_page)
+                    continue
+                visited_ids.append(curr_front_page["id"])
+                visited_ids.append(curr_end_page["id"])
+                front_visited_nodes.append(curr_front_page)
+                end_visited_nodes.append(curr_end_page)
 
-                curr_pages_links = self.__execute_sql_from_file(
-                    mycursor, self.GET_LINKED_PAGES_SQL_PATH, page_id=curr_page["id"]
+                # TODO
+                # By targeting the current start or end page, we find a path, but maybe not the best
+                # for the original start and end page. So maybe I should keep the original paths
+                # and try to match them and weight things with more weight to older entries.
+                new_front_page = self.__find_best_match(
+                    curr_front_page, curr_end_page, visited_ids, mycursor
+                )
+                new_end_page = self.__find_best_match(
+                    curr_end_page, curr_front_page, visited_ids, mycursor
                 )
 
-                unvisted_pages = []
-                for linked_page in curr_pages_links:
-                    if end_page["id"] == linked_page["id"]:
-                        visited_ids.append(end_page["id"])
-                        visited_nodes.append(end_page)
-                        break
-                    if linked_page["id"] in visited_ids:
-                        continue
-                    unvisted_pages.append(linked_page)
-
-                title_embeddings = []
-                if unvisted_pages:
-                    for page_node in unvisted_pages:
-                        embedding_list_of_floats = [
-                            float(val) for val in page_node["embedding"]
-                        ]
-
-                        title_embeddings.append(np.array(embedding_list_of_floats))
-                title_embeddings = np.array(title_embeddings)
-                # Calculate cosine similarities
-                similarities = cosine_similarity(
-                    [np.array(end_page["embedding"])],
-                    title_embeddings,
-                )[0]
-
-                # Find the best match
-                best_match = np.argmax(similarities)
-                curr_page = unvisted_pages[best_match]
+                page_queue.append((new_front_page, new_end_page))
             # TODO: Step 4: Cluster embedding results into 5 clusters, summarize the clusters
             # Step 5: Return the evolutionary links
             mycursor.close()
@@ -104,13 +99,14 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
 
             # TODO: Actually try to trace the whole linked path, but for now cut short at 10 nodes
             # and append the end.
-            visited_nodes.append(end_page)
+            end_visited_nodes.reverse()
+            front_visited_nodes.extend(end_visited_nodes)
 
             print("\nEvolutionary Links:")
-            for node in visited_nodes:
+            for node in front_visited_nodes:
                 print(node["id"], node["title"])
 
-            return visited_nodes
+            return front_visited_nodes
         except mysql.connector.Error as err:
             print(f"Error connecting or interacting with MySQL: {err}")
         finally:
@@ -121,6 +117,61 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
     def escape_sql_string(self, value):
         """Escapes single quotes in a string for safe SQL embedding."""
         return value.replace("'", "''")
+
+    def __find_best_match(self, curr_page, target_page, visited_ids, mycursor):
+        curr_pages_links = self.__execute_sql_from_file(
+            mycursor,
+            self.GET_LINKED_PAGES_SQL_PATH,
+            page_id=curr_page["id"],
+        )
+
+        if len(curr_pages_links) == 0:
+            print("no linked pages")
+            return curr_page
+
+        unvisted_pages = []
+        for linked_page in curr_pages_links:
+            if linked_page["id"] in visited_ids:
+                continue
+            unvisted_pages.append(linked_page)
+
+        # If there are unvisited pages, find the best match using cosine similarity
+        if len(unvisted_pages) > 0:
+            title_embeddings = []
+            for page_node in unvisted_pages:
+                embedding_list_of_floats = [
+                    float(val) for val in page_node["embedding"]
+                ]
+                title_embeddings.append(np.array(embedding_list_of_floats))
+            title_embeddings = np.array(title_embeddings)
+            # Calculate cosine similarities
+            similarities = cosine_similarity(
+                [np.array(target_page["embedding"])],
+                title_embeddings,
+            )[0]
+
+            # Find the best match
+            best_match = np.argmax(similarities)
+            return unvisted_pages[best_match]
+        else:
+            # If all pages are visited, find the best match using cosine similarity now that we have
+            # a new target page
+            title_embeddings = []
+            for page_node in curr_pages_links:
+                embedding_list_of_floats = [
+                    float(val) for val in page_node["embedding"]
+                ]
+                title_embeddings.append(np.array(embedding_list_of_floats))
+            title_embeddings = np.array(title_embeddings)
+            # Calculate cosine similarities
+            similarities = cosine_similarity(
+                [np.array(target_page["embedding"])],
+                title_embeddings,
+            )[0]
+
+            # Find the best match
+            best_match = np.argmax(similarities)
+            return curr_pages_links[best_match]
 
     def __execute_sql_from_file(self, cursor, file_path, page_id=None):
         try:
