@@ -5,9 +5,6 @@ import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from graph_traversal import traversal_strategy
-from embeddings import embedding_generator
-from json_data import json_loader
 import os
 from dotenv import load_dotenv
 
@@ -16,7 +13,7 @@ import mysql.connector
 load_dotenv()
 
 
-class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
+class Traversal:
     """RandomStartAndEnd Traversal uses nearest neighbor search to find the evolutionary links
     Implementation:
     1) Embed the user input
@@ -27,14 +24,13 @@ class RandomStartAndEndTraversal(traversal_strategy.TraversalStrategy):
     5) Return the evolutionary links
     """
 
-    RANDOM_STARRT_AND_END_SQL_PATH = "graph_traversal/random_start_and_end_page.sql"
-    GET_LINKED_PAGES_SQL_PATH = "graph_traversal/get_linked_pages.sql"
+    RANDOM_STARRT_AND_END_SQL_PATH = "sql/random_start_and_end_page.sql"
+    GET_LINKED_PAGES_SQL_PATH = "sql/get_linked_pages.sql"
 
-    def __init__(self, storage_layer):
-        self.storage_layer = storage_layer
+    def __init__(self):
         print("\n***** RandomStartAndEnd Traversal Strategy *****")
 
-    def traverse(self, start, end):
+    def traverse(self):
         try:
             mydb = mysql.connector.connect(
                 host="localhost",

@@ -1,8 +1,0 @@
-{
-    "task_content": "Provide three intermediary topics that create a logical sequence between the start topic and the end topic.",
-    "task_example": "Start Topic: birds, End Topic: space ships, Intermediary Topics: 1. flight 2. airplanes 3. rocket science",
-    "output_format": "Output Format: [topic1, topic2, topic3]",
-    "start_task": "Start Topic:",
-    "end_task": "End Topic:",
-    "chain_of_reasoning": "Intermediary Topics: "
-}
