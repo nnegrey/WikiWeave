@@ -40,9 +40,7 @@ Using Wikipedia articles (SimpleWiki), weave together a evolutionary narrative t
       * content
       * embedding
 * Graph Traversal
-  * `LinkGenerator` [**Working Prototype**] - Use Prompt Engineering to have the LLM provide links and context which can be used by the StoryTeller
   * `EmbeddingTraversal` [**Working Prototype**]
-    * `Article Identification` [**Complete**] - Selects two random articles from the SimpleWiki dataset.
     * [**Working Prototype**] - Traverse the links from both the start / target articles using the embeddings to choose th best linked article, then update the "start" / "target" articles to the selected linked articles and continue until a path is found.
       * *Optimization* [**TODO**] - Cluster the results into smaller groups and create summaries of the clusters to be used by the story teller.
 * StoryTeller
