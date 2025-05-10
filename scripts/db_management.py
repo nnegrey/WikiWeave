@@ -1,16 +1,11 @@
 import os
 from dotenv import load_dotenv
-
+from config import DB_CONFIG
 import mysql.connector
 
 load_dotenv()
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user=os.environ.get("MYSQL_USER"),
-    password=os.environ.get("MYSQL_PASSWORD"),
-    database=os.environ.get("MYSQL_DBNAME"),
-)
+mydb = mysql.connector.connect(**DB_CONFIG)
 
 # ***** PAGE table *****
 # (265,612, /*page_namespace=*/  0, /*page_is_redirect=*/ 0)
