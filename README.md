@@ -1,36 +1,50 @@
 # WikiWeave
 
-Status: Active Development
+Status: Working Prototype
+Next: Deploy the Prototype
 
 ---
 
 ## What is WikiWeave?
 * [Design Doc](https://docs.google.com/document/d/144tdxfU6lMPpJtF4ucBPg4v8PdUMpRt4-3NCaa5RU-w/edit?usp=sharing)
 
-WikiWeave is a project for me to get hands on with GenAI and see what kind of project I cant build from an idea → minimum viable product (MVP) → improvements / optimizations and see where that goes.
+WikiWeave is a fun project which uses the SimpleWiki dataset, embeddings, and GenAi to weave a
+evolutionary story between two articles and the linked path that story must take.
 
-### The Idea:
-Using Wikipedia articles, weave together a evolutionary narrative that tells a story of how we got from article A to article B. The initial idea is to allow for hallucinations and creative storytelling such that you could get a fun story of how Airplanes led to the evolution of Birds (maybe later, I’ll work on the problem of a Factual-WikiWeave that tries to force the correct order, however this is a fun project first).
+Using Wikipedia articles (SimpleWiki), weave together a evolutionary narrative that tells a story of how we got from article A to article B. The initial idea is to allow for hallucinations and creative storytelling such that you could get a fun story of how Airplanes led to the evolution of Birds
 
 ### Tasks:
-1) **Article Identification** - Given a input of two topics: A and B, find the closest related Wikipedia Articles *(A special case of Graph Traversal)*
-1) **Graph Traversal** - Create the path (connected graph) between the two articles using the linked articles inside A and B
+1) **Article Start/End** - Randomly select two articles from the dataset.
+1) **Graph Traversal** - Create the path (connected graph) between the two articles using the linked articles inside A and B using the embeddings of the articles to choose the path.
 1) **Story Teller** - Using the context from the article path, create a story for how the first entry led to the second entry
 
 ## Component Status
 
-* Dataset
-  * Toy dataset for development and testing
-  * [**TODO**] Expand the dataset size and get the set of embeddings offline
+* Dataset Sources
+  * [SimpleWiki](https://dumps.wikimedia.org/simplewiki/) - [Database layout](https://www.mediawiki.org/wiki/Manual:Database_layout)
+    * **[page](https://www.mediawiki.org/wiki/Manual:Page_table)**
+      * page_id
+      * page_title
+      * page_namespace
+      * page_is_redirect
+      * page_random
+    * **[pagelinks](https://www.mediawiki.org/wiki/Manual:Pagelinks_table)**
+      * pl_target_id
+      * pl_from
+    * **[linktarget](https://www.mediawiki.org/wiki/Manual:Linktarget_table)**
+      * lt_id
+      * lt_title
+  * [Wikipedia-simple-openai-embeddings](https://www.kaggle.com/datasets/stephanst/wikipedia-simple-openai-embeddings)
+    * **page_embeddings**
+      * title
+      * content
+      * embedding
 * Graph Traversal
-  * `LinkGenerator` [**alpha**] - Use Prompt Engineering to have the LLM provide links and context which can be used by the StoryTeller
-  * `EmbeddingTraversal` [**alpha**]
-    * `Article Identification` [**Complete**] - Scans the dataset to find the best matched articles for start and end point.
-      * *Optimization* [**TODO**] - Offline process the dataset into layers of Clusters, then continually cluster the input until you have a small enough sample-size to find the best match.
-    * [**alpha**] - Traverse the links by selecting the best link from the current node using the target embedding to select the path.
-      * *Optimization* [**TODO**] - 
+  * `LinkGenerator` [**Working Prototype**] - Use Prompt Engineering to have the LLM provide links and context which can be used by the StoryTeller
+  * `EmbeddingTraversal` [**Working Prototype**]
+    * `Article Identification` [**Complete**] - Selects two random articles from the SimpleWiki dataset.
+    * [**Working Prototype**] - Traverse the links from both the start / target articles using the embeddings to choose th best linked article, then update the "start" / "target" articles to the selected linked articles and continue until a path is found.
       * *Optimization* [**TODO**] - Cluster the results into smaller groups and create summaries of the clusters to be used by the story teller.
 * StoryTeller
-  * *SimpleStory* - Creates a fantastical story using the input
-  * *Optimization* [**TODO**] - Use the summary text and not just the titles
+  * *SimpleStory* - Creates a evolutionary linked story using the input links to go from the start to the end
 
