@@ -6,10 +6,20 @@ class PageNode(BaseModel):
     id: int
     title: str
     summary: str
-    embedding: List[float]
 
 
 class WikiPath(BaseModel):
     start_page: PageNode
     end_page: PageNode
     path: List[PageNode]
+
+
+class WikiNode(BaseModel):
+    id: int
+    title: str
+    summary: str
+
+
+class WovenStory(BaseModel):
+    nodes: List[WikiNode]
+    story: Optional[str] = None

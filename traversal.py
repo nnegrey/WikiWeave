@@ -89,8 +89,9 @@ class Traversal:
 
             print("\nEvolutionary Links:")
             for node in front_visited_nodes:
+                # Remove embedding field from each node before returning
+                node.pop("embedding", None)
                 print(node["id"], node["title"])
-
             return front_visited_nodes
         except mysql.connector.Error as err:
             print(f"Error connecting or interacting with MySQL: {err}")
@@ -190,37 +191,4 @@ class Traversal:
 
     def get_page_by_id(self, page_id: int):
         """Get a single page by ID."""
-        try:
-            mydb = mysql.connector.connect(**DB_CONFIG)
-            mycursor = mydb.cursor()
-
-            sql = """
-            SELECT 
-                page.page_id,
-                CONVERT(page.page_title USING utf8) AS page_title,
-                pe.content,
-                pe.embedding
-            FROM
-                page
-                JOIN page_embeddings pe
-                    ON CONVERT(page.page_title USING utf8) = pe.title
-            WHERE
-                page.page_id = %s
-                AND page.page_namespace = 0
-                AND page.page_is_redirect = 0
-            """
-
-            mycursor.execute(sql, (page_id,))
-            record = mycursor.fetchone()
-
-            if record:
-                return self.__get_page_node_from_record(record)
-            return None
-
-        except mysql.connector.Error as err:
-            print(f"Error connecting or interacting with MySQL: {err}")
-            return None
-        finally:
-            if mydb and mydb.is_connected():
-                mycursor.close()
-                mydb.close()
+        return None

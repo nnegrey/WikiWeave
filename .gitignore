@@ -6,3 +6,5 @@ docker/mysql/init/02-page.sql
 docker/mysql/init/03-pagelinks.sql
 docker/mysql/init/04-linktarget.sql
 docker/mysql/init/05-page-embeddings.sql
+cloud-sql.yaml
+cloudbuild.yaml

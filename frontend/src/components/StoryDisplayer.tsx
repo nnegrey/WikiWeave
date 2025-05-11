@@ -1,39 +1,58 @@
 import React from 'react';
 import { Box, Paper, Typography, Divider } from '@mui/material';
-import { WikiPath } from '../types/wiki';
+import { WovenStory, WikiPath } from '../types/wiki';
 
 interface StoryDisplayProps {
-    path: WikiPath;
+    story: WovenStory | WikiPath;
 }
 
-const StoryDisplay: React.FC<StoryDisplayProps> = ({ path }) => {
+const StoryDisplayer: React.FC<StoryDisplayProps> = ({ story }) => {
+    const nodes = 'nodes' in story ? story.nodes : story.path;
+    const hasStory = 'story' in story && story.story;
+
     return (
-        <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-                From: {path.start_page.title}
-            </Typography>
-            <Typography variant="h5" gutterBottom>
-                To: {path.end_page.title}
-            </Typography>
+        <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
+            {/* Path Display */}
+            <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
+                <Typography variant="h5" gutterBottom>
+                    Evolutionary Path
+                </Typography>
+                <Divider sx={{ my: 2 }} />
+                {nodes.map((node, index) => (
+                    <Box key={node.id} sx={{ mb: 2 }}>
+                        <Typography variant="h6" color="primary">
+                            {index + 1}. {node.title}
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary">
+                            {node.summary}
+                        </Typography>
+                    </Box>
+                ))}
+            </Paper>
 
-            <Divider sx={{ my: 2 }} />
-
-            <Typography variant="h6" gutterBottom>
-                Path:
-            </Typography>
-
-            {path.path.map((page, index) => (
-                <Box key={page.id} sx={{ mb: 2 }}>
-                    <Typography variant="subtitle1">
-                        {index + 1}. {page.title}
+            {/* Story Display */}
+            {hasStory && (
+                <Paper elevation={3} sx={{ p: 3 }}>
+                    <Typography variant="h5" gutterBottom>
+                        The Woven Story
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {page.summary}
+                    <Divider sx={{ my: 2 }} />
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            whiteSpace: 'pre-line',
+                            lineHeight: 1.8,
+                            '& strong': {
+                                color: 'primary.main'
+                            }
+                        }}
+                    >
+                        {story.story?.content}
                     </Typography>
-                </Box>
-            ))}
-        </Paper>
+                </Paper>
+            )}
+        </Box>
     );
 };
 
-export default StoryDisplay;
+export default StoryDisplayer;
