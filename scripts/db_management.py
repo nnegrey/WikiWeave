@@ -1,9 +1,7 @@
-import os
-from dotenv import load_dotenv
-from config import DB_CONFIG
 import mysql.connector
 
-load_dotenv()
+from config import DB_CONFIG
+
 
 mydb = mysql.connector.connect(**DB_CONFIG)
 
@@ -92,7 +90,7 @@ LIMIT 2;
 """
 
 
-mycursor.execute(use_rand_sql)
+mycursor.execute(query_sql)
 
 results = mycursor.fetchall()
 for row in results:

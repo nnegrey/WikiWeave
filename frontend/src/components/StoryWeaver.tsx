@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, CircularProgress, Box } from '@mui/material';
 import { api } from '../services/api';
 import { WikiPath } from '../types/wiki';
-import StoryDisplay from './StoryDisplay';
+import StoryDisplay from './StoryDisplayer';
 
 const StoryWeaver: React.FC = () => {
     const [loading, setLoading] = useState(false);

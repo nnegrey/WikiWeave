@@ -3,7 +3,7 @@
 import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from config import DB_CONFIG
+from config import get_db_connection
 import mysql.connector
 
 
@@ -26,7 +26,7 @@ class Traversal:
 
     def traverse(self):
         try:
-            mydb = mysql.connector.connect(**DB_CONFIG)
+            mydb = get_db_connection()
             mycursor = mydb.cursor()
 
             # Step 1: Get two random points
