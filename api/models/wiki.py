@@ -22,4 +22,4 @@ class WikiNode(BaseModel):
 
 class WovenStory(BaseModel):
     nodes: List[WikiNode]
-    story: Optional[str] = None
+    story: Optional[dict] = None

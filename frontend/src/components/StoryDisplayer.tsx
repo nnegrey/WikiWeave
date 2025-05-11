@@ -8,7 +8,7 @@ interface StoryDisplayProps {
 
 const StoryDisplayer: React.FC<StoryDisplayProps> = ({ story }) => {
     const nodes = 'nodes' in story ? story.nodes : story.path;
-    const hasStory = 'story' in story && story.story;
+    const hasStory = 'story' in story && story.story?.content;
 
     return (
         <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>

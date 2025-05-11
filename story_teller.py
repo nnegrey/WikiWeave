@@ -19,11 +19,15 @@ class StoryTeller:
         """Generates a story using the OpenAI API."""
         prompt_messages = self.__format_the_prompt(evolutionary_links)
 
-        completion = self.client.chat.completions.create(
-            model="gpt-4o-mini",
-            store=True,
-            messages=prompt_messages,
-        )
+        try:
+            completion = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                store=False,
+                messages=prompt_messages,
+            )
+        except Exception as e:
+            print(f"Error calling OpenAI API: {e}")
+            raise Exception(f"Failed to generate story: {str(e)}")
 
         return completion.choices[0].message.content
 

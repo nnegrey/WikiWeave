@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+
+# Node (only ignore in backend context)
+**/node_modules
+**/build
+**/.env*
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env*
+
+# Docker
+docker/mysql/data
+docker/sqlite
+
+# IDE
+.vscode
+.idea
+
+# Misc
+*.log
+.DS_Store 

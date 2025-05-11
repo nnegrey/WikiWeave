@@ -21,9 +21,10 @@ class WikiWeave:
         story = None
 
         if call_openai:
-            story = story_teller.StoryTeller().weave_story(items)
+            story_content = story_teller.StoryTeller().weave_story(items)
+            story = {"content": story_content}
 
-        return {"path": items, "story": story}
+        return {"nodes": items, "story": story}
 
 
 if __name__ == "__main__":
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     openai_client = OpenAI(api_key=os.environ.get("OPEN_AI_TEST_API_KEY"))
     result = WikiWeave(openai_client).weave(args.call_openai)
 
-    print(f"\nFound {len(result['path'])} items in the path.")
+    print(f"\nFound {len(result['nodes'])} items in the path.")
     if result["story"]:
         print("\nThe woven wiki:")
         print(result["story"]["content"])
